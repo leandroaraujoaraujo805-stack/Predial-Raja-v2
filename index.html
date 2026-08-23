@@ -1,0 +1,417 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#123b6d"><link rel="manifest" href="/manifest.json"><title>PREDIAL RAJA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#17202a}.hidden{display:none!important}button,input,select,textarea{font:inherit}button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.primary{background:#123b6d;color:#fff}.light{background:#e9eff6;color:#123b6d}.danger{background:#b42318;color:#fff}.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#0e3158,#2d679e);padding:20px}.box{background:#fff;width:min(460px,100%);padding:28px;border-radius:18px;box-shadow:0 20px 50px #0004}.brand{font-size:28px;font-weight:800;color:#123b6d}.muted{color:#687687;font-size:13px}input,select,textarea{width:100%;padding:11px;border:1px solid #d7dee7;border-radius:9px;margin:5px 0 12px}textarea{min-height:96px}.top{height:68px;background:#123b6d;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px}.layout{display:flex;min-height:calc(100vh - 68px)}aside{width:230px;background:#fff;border-right:1px solid #dde3ea;padding:10px}.nav{width:100%;text-align:left;background:transparent;color:#425466;margin:3px 0}.nav.active,.nav:hover{background:#e9f0f7;color:#123b6d}main{width:100%;max-width:1200px;margin:auto;padding:20px}.page{display:none}.page.active{display:block}.card{background:#fff;border:1px solid #e1e6ed;border-radius:13px;padding:18px;margin-bottom:15px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.num{font-size:28px;font-weight:800;color:#123b6d}.row,.post{padding:13px 0;border-bottom:1px solid #e5e9ef}.tag{display:inline-block;background:#e8f0f8;color:#123b6d;padding:4px 8px;border-radius:20px;font-size:12px}.chat{height:350px;overflow:auto;background:#f5f7fa;padding:12px;border-radius:10px}.bubble{max-width:76%;padding:10px 12px;border-radius:13px;margin:7px 0}.mine{margin-left:auto;background:#dcecff}.theirs{background:#fff;border:1px solid #ddd}.notice{background:#fff7e6;border:1px solid #efd08e;padding:11px;border-radius:9px;margin-bottom:14px}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){aside{width:64px}.label{display:none}main{padding:12px}.split{grid-template-columns:1fr}.top small{display:none}}
+</style>
+<style id="predial-raja-v2-style">
+:root{
+ --pr-primary:#0f3a64;--pr-primary-2:#0a2947;--pr-accent:#246da8;
+ --pr-bg:#f4f7fa;--pr-card:#fff;--pr-text:#172433;--pr-muted:#6b7785;
+ --pr-line:#dde5ec;--pr-good:#16794d;--pr-warn:#9b6700;--pr-danger:#b42318;
+ --pr-shadow:0 10px 28px rgba(15,58,100,.08)
+}
+body{background:var(--pr-bg)!important;color:var(--pr-text)!important}
+.top{background:linear-gradient(90deg,var(--pr-primary-2),var(--pr-primary))!important;box-shadow:0 4px 16px rgba(0,0,0,.13)}
+.card{border:1px solid var(--pr-line)!important;border-radius:16px!important;box-shadow:var(--pr-shadow)}
+.nav{border-radius:11px!important}
+.nav.active,.nav:hover{background:#e8f0f7!important;color:var(--pr-primary)!important}
+.pro-title{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.pro-title h2{margin:0 0 4px}
+.pro-sub{font-size:13px;color:var(--pr-muted)}
+.pro-badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e8f0f7;color:var(--pr-primary);font-size:11px;font-weight:800}
+.pro-badge.good{background:#e5f4eb;color:var(--pr-good)}
+.pro-badge.off{background:#fde8e6;color:var(--pr-danger)}
+.pro-badge.warn{background:#fff2d2;color:var(--pr-warn)}
+.pro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.pro-kpi{background:#fff;border:1px solid var(--pr-line);border-radius:14px;padding:16px}
+.pro-kpi .n{font-size:30px;font-weight:900;color:var(--pr-primary);margin-top:4px}
+.pro-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pro-secondary{background:#edf3f8;color:var(--pr-primary)}
+.pro-danger{background:#fff0ef;color:var(--pr-danger)}
+.pro-table-wrap{overflow:auto}
+.pro-table{width:100%;border-collapse:collapse;min-width:840px}
+.pro-table th,.pro-table td{padding:12px;border-bottom:1px solid var(--pr-line);text-align:left;vertical-align:top}
+.pro-table th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--pr-muted)}
+.pro-actions{display:flex;gap:6px;flex-wrap:wrap}
+.pro-perm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.pro-perm{display:flex;gap:8px;align-items:center;border:1px solid var(--pr-line);padding:10px;border-radius:10px;background:#fff}
+.pro-perm input{width:auto;margin:0}
+.pro-modal{position:fixed;inset:0;background:rgba(11,30,48,.52);display:grid;place-items:center;padding:18px;z-index:999}
+.pro-modal.hidden{display:none!important}
+.pro-dialog{width:min(720px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.pro-dialog h3{margin-top:0}
+.pro-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pro-audit{font-size:13px}
+@media(max-width:700px){
+ .pro-row2{grid-template-columns:1fr}
+ .pro-table{min-width:720px}
+}
+</style>
+
+</head><body>
+<div id="loginView" class="login"><div class="box"><div class="brand">PREDIAL RAJA</div><p>Gestão e comunicação condominial</p><label>E-mail</label><input id="email" value="admin@predialraja.local"><label>Senha</label><input id="password" type="password" value="123456"><button class="primary" style="width:100%" onclick="doLogin()">Entrar</button><p class="muted">Primeiro acesso de demonstração: admin@predialraja.local / 123456</p><div id="loginError" class="muted"></div></div></div>
+<div id="app" class="hidden"><header class="top"><b>🏢 PREDIAL RAJA</b><span id="userLabel"></span><button class="light" onclick="logout()">Sair</button></header><div class="layout"><aside>
+<button class="nav active" onclick="go('home',this)">🏠 <span class="label">Início</span></button>
+<button class="nav" onclick="go('dashboard',this)">📈 <span class="label">Dashboard</span></button>
+<button class="nav" onclick="go('condos',this)">🏢 <span class="label">Condomínios</span></button>
+<button class="nav" onclick="go('mural',this)">📢 <span class="label">Mural</span></button>
+<button class="nav" onclick="go('chat',this)">💬 <span class="label">Conversas</span></button>
+<button class="nav" onclick="go('people',this)">👥 <span class="label">Pessoas</span></button>
+<button class="nav" onclick="go('docs',this)">📁 <span class="label">Documentos</span></button>
+<button class="nav" onclick="go('requests',this)">🔧 <span class="label">Solicitações</span></button><button class="nav" onclick="go('finance',this)">📊 <span class="label">Financeiro</span></button>
+<button class="nav" onclick="go('adminpro',this);loadProfessionalAdmin()">🛡️ <span class="label">Administração</span></button>
+<button class="nav" onclick="go('settings',this)">⚙️ <span class="label">Configurações</span></button>
+</aside><main>
+<section id="home" class="page active"><div class="notice">Condomínio selecionado: <b id="selected"></b></div><div class="cards"><div class="card">Moradores<div class="num" id="nResidents">0</div></div><div class="card">Funcionários<div class="num" id="nStaff">0</div></div><div class="card">Comunicados<div class="num" id="nPosts">0</div></div><div class="card">Solicitações<div class="num" id="nReq">0</div></div></div></section>
+
+<section id="dashboard" class="page">
+<div class="notice"><b>Dashboard executivo</b> — visão consolidada do condomínio selecionado.</div>
+
+<div class="cards">
+  <div class="card"><div class="muted">Inadimplência</div><div class="num" id="dDelinq">0%</div><div id="dDelinqTrend" class="muted">Sem histórico</div></div>
+  <div class="card"><div class="muted">Arrecadação</div><div class="num" id="dCollection">0%</div><div id="dCollectionTrend" class="muted">Sem histórico</div></div>
+  <div class="card"><div class="muted">Saldo atual</div><div class="num" id="dBalance">R$ 0,00</div><div id="dBalanceTrend" class="muted">Sem histórico</div></div>
+  <div class="card"><div class="muted">Crescimento recebido</div><div class="num" id="dGrowth">0%</div><div id="dGrowthStatus" class="muted">Sem histórico</div></div>
+</div>
+
+<div class="cards">
+  <div class="card"><div class="muted">Moradores</div><div class="num" id="dResidents">0</div></div>
+  <div class="card"><div class="muted">Funcionários</div><div class="num" id="dStaff">0</div></div>
+  <div class="card"><div class="muted">Solicitações abertas</div><div class="num" id="dOpenReq">0</div></div>
+  <div class="card"><div class="muted">Comunicados</div><div class="num" id="dPosts">0</div></div>
+</div>
+
+<div class="split">
+  <div class="card">
+    <h2>Receitas e despesas</h2>
+    <canvas id="dashFinanceCanvas" width="900" height="340" style="width:100%;max-height:340px"></canvas>
+  </div>
+  <div class="card">
+    <h2>Inadimplência mensal</h2>
+    <canvas id="dashDelinqCanvas" width="900" height="340" style="width:100%;max-height:340px"></canvas>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Leitura automática</h2>
+  <div id="dashboardInsights"></div>
+</div>
+</section>
+
+<section id="condos" class="page"><div class="card"><h2>Condomínios</h2><div id="condoList"></div><button id="newCondoBtn" class="primary" onclick="newCondo()">+ Novo condomínio</button></div></section>
+<section id="mural" class="page"><div id="publishBox" class="card"><h2>Novo comunicado</h2><input id="postTitle" placeholder="Título"><textarea id="postBody" placeholder="Mensagem"></textarea><select id="postCat"><option>Comunicado</option><option>Urgente</option><option>Manutenção</option><option>Assembleia</option></select><button class="primary" onclick="createPost()">Publicar</button></div><div class="card"><h2>Mural</h2><div id="postList"></div></div></section>
+<section id="chat" class="page"><div class="card"><h2>Conversa individual ou em grupo</h2><select id="chatTarget" onchange="loadMessages()"></select><div id="chatBox" class="chat"></div><input id="chatText" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendMessage()"><button class="primary" onclick="sendMessage()">Enviar</button></div></section>
+<section id="people" class="page"><div class="split"><div class="card"><h2>Pessoas</h2><div id="peopleList"></div></div><div id="addPersonBox" class="card"><h2>Adicionar pessoa</h2><input id="pName" placeholder="Nome"><input id="pEmail" placeholder="E-mail"><input id="pPhone" placeholder="Telefone"><input id="pPassword" type="password" placeholder="Senha inicial"><select id="pRole"><option value="condomino">Condômino</option><option value="funcionario">Funcionário</option><option value="conselho">Conselho</option><option value="sindico">Síndico</option></select><input id="pApt" placeholder="Apartamento (se aplicável)"><input id="pJob" placeholder="Cargo (se funcionário)"><button class="primary" onclick="addPerson()">Cadastrar</button></div></div><div id="groupBox" class="card"><h2>Grupos</h2><div id="groupList"></div><input id="gName" placeholder="Nome do grupo"><button class="primary" onclick="addGroup()">Criar grupo vazio</button></div></section>
+<section id="docs" class="page"><div class="card"><h2>Documentos e fotos</h2><input id="file" type="file"><input id="fileTitle" placeholder="Título"><button class="primary" onclick="uploadDoc()">Enviar arquivo</button><div id="docList"></div></div></section>
+<section id="requests" class="page"><div class="card"><h2>Nova solicitação</h2><input id="rTitle" placeholder="Assunto"><textarea id="rDesc" placeholder="Descrição"></textarea><button class="primary" onclick="createReq()">Registrar</button></div><div class="card"><h2>Solicitações</h2><div id="reqList"></div></div></section>
+<section id="finance" class="page"><div class="cards"><div class="card">Inadimplência atual<div class="num" id="fDelinq">0%</div></div><div class="card">Arrecadação<div class="num" id="fCollection">0%</div></div><div class="card">Saldo do mês<div class="num" id="fBalance">R$ 0</div></div><div class="card">Crescimento arrecadação<div class="num" id="fGrowth">0%</div></div></div><div id="financeInputBox" class="card"><h2>Lançamento mensal</h2><div class="split"><div><label>Mês</label><input id="fMonth" type="month"></div><div><label>Unidades</label><input id="fUnits" type="number" value="48"></div></div><div class="split"><div><label>Receita prevista (R$)</label><input id="fExpected" type="number" step="0.01"></div><div><label>Receita recebida (R$)</label><input id="fReceived" type="number" step="0.01"></div></div><div class="split"><div><label>Despesas (R$)</label><input id="fExpenses" type="number" step="0.01"></div><div><label>Unidades inadimplentes</label><input id="fDelinqUnits" type="number"></div></div><button class="primary" onclick="saveFinance()">Salvar mês</button></div><div class="card"><h2>Evolução financeira</h2><canvas id="financeCanvas" width="1000" height="360" style="width:100%;max-height:360px"></canvas></div><div class="card"><h2>Histórico e cálculos automáticos</h2><div id="financeTable"></div></div></section>
+<section id="adminpro" class="page">
+  <div class="card">
+    <div class="pro-title">
+      <div>
+        <h2>Administração profissional</h2>
+        <div class="pro-sub">Usuários, acessos, permissões e auditoria do condomínio selecionado.</div>
+      </div>
+      <span class="pro-badge good">Controle de acesso</span>
+    </div>
+    <div class="pro-grid" style="margin-top:14px">
+      <div class="pro-kpi"><div class="muted">Usuários ativos</div><div class="n" id="proActive">0</div></div>
+      <div class="pro-kpi"><div class="muted">Moradores</div><div class="n" id="proResidents">0</div></div>
+      <div class="pro-kpi"><div class="muted">Funcionários</div><div class="n" id="proStaff">0</div></div>
+      <div class="pro-kpi"><div class="muted">Suspensos</div><div class="n" id="proSuspended">0</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pro-title">
+      <div><h2>Usuários e perfis</h2><div class="pro-sub">Edite, suspenda, reative, exclua e personalize permissões.</div></div>
+      <button class="primary" onclick="openNewProfessionalUser()">+ Novo usuário</button>
+    </div>
+    <div class="pro-table-wrap" style="margin-top:12px">
+      <table class="pro-table">
+        <thead><tr><th>Usuário</th><th>Perfil</th><th>Contato</th><th>Status</th><th>Permissões</th><th>Ações</th></tr></thead>
+        <tbody id="proPeopleBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pro-title">
+      <div><h2>Auditoria</h2><div class="pro-sub">Últimas alterações administrativas realizadas no condomínio.</div></div>
+      <button class="pro-secondary" onclick="loadProfessionalAudit()">Atualizar</button>
+    </div>
+    <div id="proAuditList" class="pro-audit"></div>
+  </div>
+</section>
+
+<section id="settings" class="page"><div class="card"><h2>Dados do condomínio</h2><input id="sName" placeholder="Nome"><input id="sCnpj" placeholder="CNPJ"><input id="sAddress" placeholder="Endereço"><input id="sPhone" placeholder="Telefone"><input id="sEmail" placeholder="E-mail"><input id="sLogo" placeholder="URL da logo/foto"><button class="primary" onclick="saveSettings()">Salvar</button></div></section>
+</main></div></div>
+<script>
+let token=localStorage.getItem('token')||'', me=null, memberships=[], condos=[], condo=null, people=[], groups=[];
+async function api(url,opt={}){opt.headers=opt.headers||{}; if(token)opt.headers.Authorization='Bearer '+token;if(!(opt.body instanceof FormData)&&opt.body){opt.headers['Content-Type']='application/json';opt.body=JSON.stringify(opt.body)}let r=await fetch(url,opt);let j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Erro');return j}
+async function doLogin(){loginError.textContent='';try{let r=await api('/api/login',{method:'POST',body:{email:email.value,password:password.value}});token=r.token;localStorage.setItem('token',token);await init()}catch(e){loginError.textContent=e.message}}
+function logout(){localStorage.removeItem('token');location.reload()}
+async function init(){try{let m=await api('/api/me');me=m.user;memberships=m.memberships;condos=await api('/api/condominiums');condo=condos[0];loginView.classList.add('hidden');app.classList.remove('hidden');userLabel.textContent=me.name;await refresh()}catch{logout()}}
+function role(){return condo?condo.role:''}function manage(){return ['admin','sindico'].includes(role())}
+async function choose(id){condo=condos.find(c=>c.id===id);await refresh()}
+async function refresh(){if(!condo)return;selected.textContent=condo.name;people=await api('/api/people/'+condo.id);groups=await api('/api/groups/'+condo.id);let posts=await api('/api/posts/'+condo.id), req=await api('/api/requests/'+condo.id);nResidents.textContent=people.filter(x=>x.role==='condomino').length;nStaff.textContent=people.filter(x=>x.role==='funcionario').length;nPosts.textContent=posts.length;nReq.textContent=req.length;newCondoBtn.classList.toggle('hidden',!memberships.some(x=>x.role==='admin'));publishBox.classList.toggle('hidden',!manage());addPersonBox.classList.toggle('hidden',!manage());groupBox.classList.toggle('hidden',!manage());renderCondos();renderPeople();renderGroups();renderPosts(posts);renderReq(req);await renderDocs();renderSettings();renderChatTargets();await renderFinance();await renderDashboard()}
+function go(id,b){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function renderCondos(){condoList.innerHTML=condos.map(c=>`<div class="row"><b>${esc(c.name)}</b> — ${esc(c.role)} <button class="light" onclick="choose('${c.id}')">Selecionar</button></div>`).join('')}
+async function newCondo(){let name=prompt('Nome do condomínio');if(!name)return;await api('/api/condominiums',{method:'POST',body:{name}});condos=await api('/api/condominiums');condo=condos.at(-1);await refresh()}
+function renderPeople(){peopleList.innerHTML=people.map(p=>`<div class="row"><b>${esc(p.name)}</b><br><span class="muted">${esc(p.role)} ${p.apt?'· Apto '+esc(p.apt):''} ${p.job_title?'· '+esc(p.job_title):''}</span></div>`).join('')}
+async function addPerson(){await api('/api/people/'+condo.id,{method:'POST',body:{name:pName.value,email:pEmail.value,phone:pPhone.value,password:pPassword.value,role:pRole.value,apt:pApt.value,job_title:pJob.value}});pName.value=pEmail.value=pPhone.value=pPassword.value=pApt.value=pJob.value='';await refresh()}
+function renderGroups(){groupList.innerHTML=groups.map(g=>`<div class="row"><b>${esc(g.name)}</b> — ${g.members.length} integrante(s)</div>`).join('')||'Nenhum grupo'}
+async function addGroup(){if(!gName.value)return;await api('/api/groups/'+condo.id,{method:'POST',body:{name:gName.value,members:[]}});gName.value='';await refresh()}
+function renderPosts(x){postList.innerHTML=x.map(p=>`<div class="post"><span class="tag">${esc(p.category)}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p><span class="muted">${esc(p.author_name)} · ${new Date(p.created_at).toLocaleString('pt-BR')}</span></div>`).join('')||'Nenhum comunicado'}
+async function createPost(){await api('/api/posts/'+condo.id,{method:'POST',body:{title:postTitle.value,body:postBody.value,category:postCat.value}});postTitle.value=postBody.value='';await refresh()}
+function renderReq(x){reqList.innerHTML=x.map(r=>`<div class="row"><span class="tag">${esc(r.status)}</span> <b>${esc(r.title)}</b><p>${esc(r.description)}</p><span class="muted">${esc(r.requester_name)}</span>${manage()?`<br><button class="light" onclick="setReq('${r.id}','Em andamento')">Em andamento</button> <button class="light" onclick="setReq('${r.id}','Concluído')">Concluir</button>`:''}</div>`).join('')||'Nenhuma solicitação'}
+async function createReq(){await api('/api/requests/'+condo.id,{method:'POST',body:{title:rTitle.value,description:rDesc.value}});rTitle.value=rDesc.value='';await refresh()}
+async function setReq(id,status){await api('/api/requests/'+condo.id+'/'+id,{method:'PUT',body:{status}});await refresh()}
+async function renderDocs(){let x=await api('/api/documents/'+condo.id);docList.innerHTML=x.map(d=>`<div class="row">📎 <a href="/uploads/${encodeURIComponent(d.file_path)}" target="_blank">${esc(d.title)}</a><br><span class="muted">${esc(d.original_name)}</span></div>`).join('')||'Nenhum arquivo'}
+async function uploadDoc(){if(!file.files[0])return alert('Escolha um arquivo');let f=new FormData();f.append('file',file.files[0]);f.append('title',fileTitle.value);await api('/api/documents/'+condo.id,{method:'POST',body:f});file.value=fileTitle.value='';await refresh()}
+function renderSettings(){sName.value=condo.name||'';sCnpj.value=condo.cnpj||'';sAddress.value=condo.address||'';sPhone.value=condo.phone||'';sEmail.value=condo.email||'';sLogo.value=condo.logo||''}
+async function saveSettings(){await api('/api/condominiums/'+condo.id,{method:'PUT',body:{name:sName.value,cnpj:sCnpj.value,address:sAddress.value,phone:sPhone.value,email:sEmail.value,logo:sLogo.value}});condos=await api('/api/condominiums');condo=condos.find(x=>x.id===condo.id);await refresh()}
+function renderChatTargets(){let opts=people.filter(p=>p.id!==me.id).map(p=>`<option value="user:${p.id}">${esc(p.name)} — individual</option>`).join('');opts+=groups.map(g=>`<option value="group:${g.id}">${esc(g.name)} — grupo</option>`).join('');chatTarget.innerHTML=opts;loadMessages()}
+async function loadMessages(){if(!chatTarget.value)return chatBox.innerHTML='';let [t,id]=chatTarget.value.split(':');let x=await api(`/api/messages/${condo.id}?target_type=${t}&target_id=${id}`);chatBox.innerHTML=x.map(m=>`<div class="bubble ${m.sender_id===me.id?'mine':'theirs'}">${esc(m.body)}<div class="muted">${new Date(m.created_at).toLocaleString('pt-BR')}</div></div>`).join('');chatBox.scrollTop=chatBox.scrollHeight}
+async function sendMessage(){if(!chatText.value||!chatTarget.value)return;let [t,id]=chatTarget.value.split(':');await api('/api/messages/'+condo.id,{method:'POST',body:{target_type:t,target_id:id,body:chatText.value}});chatText.value='';await loadMessages()}
+async function renderFinance(){let rows=await api('/api/finance/'+condo.id);financeInputBox.classList.toggle('hidden',!manage());let latest=rows.at(-1),prev=rows.at(-2);fDelinq.textContent=latest?latest.delinquency_rate.toFixed(2)+'%':'0%';fCollection.textContent=latest?latest.collection_rate.toFixed(2)+'%':'0%';fBalance.textContent=latest?brl(latest.balance):'R$ 0,00';let growth=(latest&&prev&&prev.received_revenue)?((latest.received_revenue-prev.received_revenue)/prev.received_revenue*100):0;fGrowth.textContent=(growth>=0?'+':'')+growth.toFixed(2)+'%';financeTable.innerHTML=rows.length?rows.slice().reverse().map((r,idx)=>{let pos=rows.length-1-idx,old=pos>0?rows[pos-1]:null,g=old&&old.received_revenue?((r.received_revenue-old.received_revenue)/old.received_revenue*100):0;return `<div class="row"><b>${esc(r.reference_month)}</b><br><span class="muted">Previsto ${brl(r.expected_revenue)} · Recebido ${brl(r.received_revenue)} · Despesas ${brl(r.expenses)} · Saldo ${brl(r.balance)} · Inadimplência ${r.delinquency_rate.toFixed(2)}% · Arrecadação ${r.collection_rate.toFixed(2)}% · Variação ${(g>=0?'+':'')+g.toFixed(2)}%</span></div>`}).join(''):'Nenhum lançamento financeiro.';drawFinance(rows)}
+function brl(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+async function saveFinance(){await api('/api/finance/'+condo.id,{method:'POST',body:{reference_month:fMonth.value,expected_revenue:+fExpected.value||0,received_revenue:+fReceived.value||0,expenses:+fExpenses.value||0,total_units:+fUnits.value||0,delinquent_units:+fDelinqUnits.value||0}});await renderFinance()}
+function drawFinance(rows){const c=financeCanvas,ctx=c.getContext('2d'),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);if(!rows.length){ctx.font='24px Arial';ctx.fillText('Adicione lançamentos mensais para gerar os gráficos.',35,70);return}let pad=55,max=Math.max(1,...rows.flatMap(r=>[r.expected_revenue,r.received_revenue,r.expenses]));ctx.strokeStyle='#b8c2cc';ctx.beginPath();ctx.moveTo(pad,25);ctx.lineTo(pad,H-pad);ctx.lineTo(W-20,H-pad);ctx.stroke();let xs=rows.map((_,i)=>pad+(W-pad-30)*(rows.length===1?.5:i/(rows.length-1)));[['expected_revenue','#687687'],['received_revenue','#123b6d'],['expenses','#b42318']].forEach(([key,color])=>{ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();rows.forEach((r,i)=>{let x=xs[i],y=H-pad-(r[key]/max)*(H-pad-40);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()});ctx.font='14px Arial';ctx.fillStyle='#425466';rows.forEach((r,i)=>ctx.fillText(r.reference_month,xs[i]-25,H-25));ctx.fillStyle='#687687';ctx.fillText('Previsto',70,22);ctx.fillStyle='#123b6d';ctx.fillText('Recebido',160,22);ctx.fillStyle='#b42318';ctx.fillText('Despesas',260,22)}
+
+
+async function renderDashboard(){
+  let finance=await api('/api/finance/'+condo.id);
+  let req=await api('/api/requests/'+condo.id);
+  let posts=await api('/api/posts/'+condo.id);
+
+  const latest=finance.at(-1), prev=finance.at(-2);
+  const delinq=latest?latest.delinquency_rate:0;
+  const collection=latest?latest.collection_rate:0;
+  const balance=latest?latest.balance:0;
+  const growth=(latest&&prev&&prev.received_revenue)?((latest.received_revenue-prev.received_revenue)/prev.received_revenue*100):0;
+  const prevDelinq=prev?prev.delinquency_rate:null;
+  const prevCollection=prev?prev.collection_rate:null;
+  const prevBalance=prev?prev.balance:null;
+
+  dDelinq.textContent=delinq.toFixed(2)+'%';
+  dCollection.textContent=collection.toFixed(2)+'%';
+  dBalance.textContent=brl(balance);
+  dGrowth.textContent=(growth>=0?'+':'')+growth.toFixed(2)+'%';
+
+  dResidents.textContent=people.filter(x=>x.role==='condomino').length;
+  dStaff.textContent=people.filter(x=>x.role==='funcionario').length;
+  dOpenReq.textContent=req.filter(x=>x.status!=='Concluído').length;
+  dPosts.textContent=posts.length;
+
+  dDelinqTrend.textContent=prevDelinq===null?'Sem histórico':trendText(prevDelinq-delinq,true,'p.p.');
+  dCollectionTrend.textContent=prevCollection===null?'Sem histórico':trendText(collection-prevCollection,true,'p.p.');
+  dBalanceTrend.textContent=prevBalance===null?'Sem histórico':trendText(balance-prevBalance,true,'R$');
+  dGrowthStatus.textContent=finance.length<2?'Sem histórico':(growth>0?'Crescimento':growth<0?'Queda':'Estável');
+
+  drawDashFinance(finance);
+  drawDashDelinq(finance);
+  renderInsights(finance,req,posts);
+}
+
+function trendText(diff,positiveIsGood,unit){
+  if(Math.abs(diff)<0.01) return 'Estável vs. mês anterior';
+  let good=(diff>0)===positiveIsGood;
+  let symbol=diff>0?'▲':'▼';
+  if(unit==='R$') return `${symbol} ${brl(Math.abs(diff))} vs. mês anterior`;
+  return `${symbol} ${Math.abs(diff).toFixed(2)} ${unit} vs. mês anterior`;
+}
+
+function drawDashFinance(rows){
+ const c=dashFinanceCanvas,ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+ if(!rows.length){ctx.font='20px Arial';ctx.fillText('Sem dados financeiros.',30,55);return}
+ const W=c.width,H=c.height,p=50,max=Math.max(1,...rows.flatMap(r=>[r.received_revenue,r.expenses]));
+ ctx.strokeStyle='#c4ccd5';ctx.beginPath();ctx.moveTo(p,20);ctx.lineTo(p,H-p);ctx.lineTo(W-20,H-p);ctx.stroke();
+ const xs=rows.map((_,i)=>p+(W-p-30)*(rows.length===1?.5:i/(rows.length-1)));
+ [['received_revenue','#123b6d'],['expenses','#b42318']].forEach(([k,col])=>{
+   ctx.strokeStyle=col;ctx.lineWidth=3;ctx.beginPath();
+   rows.forEach((r,i)=>{let x=xs[i],y=H-p-(r[k]/max)*(H-p-40);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();
+ });
+ ctx.font='13px Arial';ctx.fillStyle='#425466';rows.forEach((r,i)=>ctx.fillText(r.reference_month,xs[i]-20,H-20));
+ ctx.fillStyle='#123b6d';ctx.fillText('Recebido',70,20);ctx.fillStyle='#b42318';ctx.fillText('Despesas',160,20);
+}
+
+function drawDashDelinq(rows){
+ const c=dashDelinqCanvas,ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+ if(!rows.length){ctx.font='20px Arial';ctx.fillText('Sem dados de inadimplência.',30,55);return}
+ const W=c.width,H=c.height,p=50,max=Math.max(10,...rows.map(r=>r.delinquency_rate));
+ ctx.strokeStyle='#c4ccd5';ctx.beginPath();ctx.moveTo(p,20);ctx.lineTo(p,H-p);ctx.lineTo(W-20,H-p);ctx.stroke();
+ const bw=Math.max(18,(W-p-40)/Math.max(rows.length,1)*0.55);
+ rows.forEach((r,i)=>{
+   let x=p+20+i*((W-p-40)/rows.length),bh=(r.delinquency_rate/max)*(H-p-45),y=H-p-bh;
+   ctx.fillStyle='#123b6d';ctx.fillRect(x,y,bw,bh);
+   ctx.fillStyle='#425466';ctx.font='13px Arial';ctx.fillText(r.reference_month,x-2,H-20);
+ });
+}
+
+function renderInsights(finance,req,posts){
+ let insights=[];
+ if(!finance.length) insights.push('Adicione os dados financeiros mensais para o dashboard gerar análises automáticas.');
+ else{
+   const l=finance.at(-1),p=finance.at(-2);
+   if(l.delinquency_rate>=10) insights.push(`A inadimplência está em ${l.delinquency_rate.toFixed(2)}%, nível que merece atenção.`);
+   else if(l.delinquency_rate>0) insights.push(`A inadimplência atual é de ${l.delinquency_rate.toFixed(2)}%.`);
+   else insights.push('Não há inadimplência registrada no mês atual.');
+   if(l.balance<0) insights.push(`O saldo do mês está negativo em ${brl(Math.abs(l.balance))}.`);
+   else insights.push(`O saldo do mês está positivo em ${brl(l.balance)}.`);
+   if(p&&p.received_revenue){
+      let g=(l.received_revenue-p.received_revenue)/p.received_revenue*100;
+      insights.push(g>0?`A arrecadação cresceu ${g.toFixed(2)}% em relação ao mês anterior.`:g<0?`A arrecadação caiu ${Math.abs(g).toFixed(2)}% em relação ao mês anterior.`:'A arrecadação ficou estável em relação ao mês anterior.');
+   }
+ }
+ let open=req.filter(x=>x.status!=='Concluído').length;
+ insights.push(`Há ${open} solicitação(ões) ainda não concluída(s).`);
+ insights.push(`Foram publicados ${posts.length} comunicado(s) neste condomínio.`);
+ dashboardInsights.innerHTML=insights.map(x=>`<div class="row">${esc(x)}</div>`).join('');
+}
+
+if(token)init();
+</script>
+<div id="proUserModal" class="pro-modal hidden">
+ <div class="pro-dialog">
+  <div class="pro-title"><h3 id="proUserModalTitle">Editar usuário</h3><button class="pro-secondary" onclick="closeProModal('proUserModal')">Fechar</button></div>
+  <input type="hidden" id="proUserId">
+  <div class="pro-row2">
+    <div><label>Nome</label><input id="proName"></div>
+    <div><label>E-mail</label><input id="proEmail"></div>
+  </div>
+  <div class="pro-row2">
+    <div><label>Telefone</label><input id="proPhone"></div>
+    <div><label>Perfil</label><select id="proRole"><option value="condomino">Condômino</option><option value="funcionario">Funcionário</option><option value="conselho">Conselho</option><option value="sindico">Síndico</option></select></div>
+  </div>
+  <div class="pro-row2">
+    <div><label>Apartamento</label><input id="proApt"></div>
+    <div><label>Cargo</label><input id="proJob"></div>
+  </div>
+  <div id="proPasswordWrap"><label>Senha inicial</label><input id="proPassword" type="password" placeholder="Somente para novo usuário"></div>
+  <button class="primary" onclick="saveProfessionalUser()">Salvar usuário</button>
+ </div>
+</div>
+
+<div id="proPermModal" class="pro-modal hidden">
+ <div class="pro-dialog">
+  <div class="pro-title"><div><h3>Permissões do usuário</h3><div class="pro-sub" id="proPermUserName"></div></div><button class="pro-secondary" onclick="closeProModal('proPermModal')">Fechar</button></div>
+  <input type="hidden" id="proPermUserId">
+  <div class="pro-perm-grid" id="proPermGrid"></div>
+  <button class="primary" onclick="saveProfessionalPermissions()">Salvar permissões</button>
+ </div>
+</div>
+
+
+<script id="predial-raja-v2-admin">
+const PRO_MODULES=[
+ ['mural','Mural'],
+ ['chat','Conversas'],
+ ['documentos','Documentos'],
+ ['solicitacoes','Solicitações'],
+ ['financeiro','Financeiro'],
+ ['dashboard','Dashboard'],
+ ['pessoas','Pessoas'],
+ ['usuarios','Administrar usuários'],
+ ['configuracoes','Configurações']
+];
+let proPeople=[];
+
+function closeProModal(id){document.getElementById(id).classList.add('hidden')}
+
+async function loadProfessionalAdmin(){
+ if(!condo?.id)return;
+ try{
+   proPeople=await api('/api/people/'+condo.id);
+   renderProfessionalPeople();
+   await loadProfessionalAudit();
+ }catch(e){alert(e.message)}
+}
+
+function renderProfessionalPeople(){
+ const body=document.getElementById('proPeopleBody'); if(!body)return;
+ const active=proPeople.filter(x=>Number(x.active)!==0);
+ proActive.textContent=active.length;
+ proResidents.textContent=proPeople.filter(x=>x.role==='condomino').length;
+ proStaff.textContent=proPeople.filter(x=>x.role==='funcionario').length;
+ proSuspended.textContent=proPeople.filter(x=>Number(x.active)===0).length;
+
+ body.innerHTML=proPeople.map(p=>{
+   const perms=p.permissions||{};
+   const enabled=Object.keys(perms).filter(k=>perms[k]).length;
+   return `<tr>
+    <td><b>${esc(p.name)}</b>${p.apt?`<div class="muted">Apto ${esc(p.apt)}</div>`:''}</td>
+    <td><span class="pro-badge">${esc(p.role)}</span>${p.job_title?`<div class="muted">${esc(p.job_title)}</div>`:''}</td>
+    <td>${esc(p.email||'')}<div class="muted">${esc(p.phone||'')}</div></td>
+    <td>${Number(p.active)!==0?'<span class="pro-badge good">Ativo</span>':'<span class="pro-badge off">Suspenso</span>'}</td>
+    <td>${enabled} personalizada(s)</td>
+    <td><div class="pro-actions">
+      <button class="pro-secondary" onclick="editProfessionalUser('${p.id}')">Editar</button>
+      <button class="pro-secondary" onclick="openProfessionalPermissions('${p.id}')">Permissões</button>
+      <button class="pro-secondary" onclick="toggleProfessionalUser('${p.id}',${Number(p.active)!==0?0:1})">${Number(p.active)!==0?'Suspender':'Reativar'}</button>
+      <button class="pro-danger" onclick="deleteProfessionalUser('${p.id}')">Excluir</button>
+    </div></td>
+   </tr>`;
+ }).join('');
+}
+
+function openNewProfessionalUser(){
+ proUserModalTitle.textContent='Novo usuário';
+ proUserId.value='';
+ proName.value=''; proEmail.value=''; proPhone.value=''; proApt.value=''; proJob.value=''; proPassword.value='';
+ proRole.value='condomino'; proEmail.disabled=false; proPasswordWrap.classList.remove('hidden');
+ proUserModal.classList.remove('hidden');
+}
+function editProfessionalUser(id){
+ const p=proPeople.find(x=>x.id===id); if(!p)return;
+ proUserModalTitle.textContent='Editar usuário';
+ proUserId.value=p.id; proName.value=p.name||''; proEmail.value=p.email||''; proPhone.value=p.phone||'';
+ proRole.value=p.role||'condomino'; proApt.value=p.apt||''; proJob.value=p.job_title||'';
+ proEmail.disabled=true; proPasswordWrap.classList.add('hidden'); proUserModal.classList.remove('hidden');
+}
+async function saveProfessionalUser(){
+ const id=proUserId.value;
+ try{
+   if(id){
+     await api('/api/people/'+condo.id+'/'+id,{method:'PUT',body:{name:proName.value,phone:proPhone.value,role:proRole.value,apt:proApt.value,job_title:proJob.value}});
+   }else{
+     await api('/api/people/'+condo.id,{method:'POST',body:{name:proName.value,email:proEmail.value,phone:proPhone.value,password:proPassword.value,role:proRole.value,apt:proApt.value,job_title:proJob.value}});
+   }
+   closeProModal('proUserModal'); await loadProfessionalAdmin(); await refresh();
+ }catch(e){alert(e.message)}
+}
+async function toggleProfessionalUser(id,active){
+ if(!confirm(active?'Reativar este usuário?':'Suspender este usuário?'))return;
+ try{await api('/api/people/'+condo.id+'/'+id,{method:'PATCH',body:{active}});await loadProfessionalAdmin()}catch(e){alert(e.message)}
+}
+async function deleteProfessionalUser(id){
+ const p=proPeople.find(x=>x.id===id); if(!p)return;
+ if(!confirm(`Excluir ${p.name}? O histórico será preservado para auditoria.`))return;
+ try{await api('/api/people/'+condo.id+'/'+id,{method:'DELETE'});await loadProfessionalAdmin();await refresh()}catch(e){alert(e.message)}
+}
+function openProfessionalPermissions(id){
+ const p=proPeople.find(x=>x.id===id); if(!p)return;
+ proPermUserId.value=id; proPermUserName.textContent=p.name;
+ const perms=p.permissions||{};
+ proPermGrid.innerHTML=PRO_MODULES.map(([key,label])=>`<label class="pro-perm"><input type="checkbox" data-perm="${key}" ${perms[key]?'checked':''}> ${label}</label>`).join('');
+ proPermModal.classList.remove('hidden');
+}
+async function saveProfessionalPermissions(){
+ const permissions={};
+ document.querySelectorAll('#proPermGrid [data-perm]').forEach(x=>permissions[x.dataset.perm]=x.checked);
+ try{
+  await api('/api/people/'+condo.id+'/'+proPermUserId.value+'/permissions',{method:'PUT',body:{permissions}});
+  closeProModal('proPermModal'); await loadProfessionalAdmin();
+ }catch(e){alert(e.message)}
+}
+async function loadProfessionalAudit(){
+ if(!condo?.id)return;
+ const box=document.getElementById('proAuditList'); if(!box)return;
+ try{
+  const rows=await api('/api/audit/'+condo.id);
+  box.innerHTML=rows.length?rows.map(a=>`<div class="row"><b>${esc(a.action)}</b> · ${esc(a.user_name||'Sistema')}<div class="muted">${new Date(a.created_at).toLocaleString('pt-BR')}</div></div>`).join(''):'Nenhuma alteração administrativa registrada.';
+ }catch(e){box.innerHTML='<div class="muted">Auditoria disponível apenas para síndico/administrador.</div>'}
+}
+</script>
+
+</body></html>
