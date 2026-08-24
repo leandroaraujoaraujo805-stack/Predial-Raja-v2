@@ -2561,7 +2561,564 @@ function renderChatTargets() {
 
   loadMessages();
 }
-  </script>
+ async function loadMessages(){if(!chatTarget.value)return chatBox.innerHTML='';let [t,id]=chatTarget.value.split(':');let x=await api(`/api/messages/${condo.id}?target_type=${t}&target_id=${id}`);chatBox.innerHTML=x.map(m=>`<div class="bubble ${m.sender_id===me.id?'mine':'theirs'}">${esc(m.body)}<div class="muted">${new Date(m.created_at).toLocaleString('pt-BR')}</div></div>`).join('');chatBox.scrollTop=chatBox.scrollHeight}
 
+async function sendMessage(){if(!chatText.value||!chatTarget.value)return;let [t,id]=chatTarget.value.split(':');await api('/api/messages/'+condo.id,{method:'POST',body:{target_type:t,target_id:id,body:chatText.value}});chatText.value='';await loadMessages()}
+
+async function renderFinance(){let rows=await api('/api/finance/'+condo.id);financeInputBox.classList.toggle('hidden',!manage());let latest=rows.at(-1),prev=rows.at(-2);fDelinq.textContent=latest?latest.delinquency_rate.toFixed(2)+'%':'0%';fCollection.textContent=latest?latest.collection_rate.toFixed(2)+'%':'0%';fBalance.textContent=latest?brl(latest.balance):'R$ 0,00';let growth=(latest&&prev&&prev.received_revenue)?((latest.received_revenue-prev.received_revenue)/prev.received_revenue*100):0;fGrowth.textContent=(growth>=0?'+':'')+growth.toFixed(2)+'%';financeTable.innerHTML=rows.length?rows.slice().reverse().map((r,idx)=>{let pos=rows.length-1-idx,old=pos>0?rows[pos-1]:null,g=old&&old.received_revenue?((r.received_revenue-old.received_revenue)/old.received_revenue*100):0;return `<div class="row"><b>${esc(r.reference_month)}</b><br><span class="muted">Previsto ${brl(r.expected_revenue)} · Recebido ${brl(r.received_revenue)} · Despesas ${brl(r.expenses)} · Saldo ${brl(r.balance)} · Inadimplência ${r.delinquency_rate.toFixed(2)}% · Arrecadação ${r.collection_rate.toFixed(2)}% · Variação ${(g>=0?'+':'')+g.toFixed(2)}%</span></div>`}).join(''):'Nenhum lançamento financeiro.';drawFinance(rows)}
+
+function brl(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+
+async function saveFinance(){await api('/api/finance/'+condo.id,{method:'POST',body:{reference_month:fMonth.value,expected_revenue:+fExpected.value||0,received_revenue:+fReceived.value||0,expenses:+fExpenses.value||0,total_units:+fUnits.value||0,delinquent_units:+fDelinqUnits.value||0}});await renderFinance()}
+
+function drawFinance(rows){
+const c=financeCanvas,ctx=c.getContext('2d'),W=c.width,H=c.height;
+ctx.clearRect(0,0,W,H);
+
+if(!rows.length){
+ctx.font='24px Arial';
+ctx.fillText('Adicione lançamentos mensais para gerar os gráficos.',35,70);
+return
+}
+
+let pad=55,max=Math.max(1,...rows.flatMap(r=>[r.expected_revenue,r.received_revenue,r.expenses]));
+
+ctx.strokeStyle='#b8c2cc';
+ctx.beginPath();
+ctx.moveTo(pad,25);
+ctx.lineTo(pad,H-pad);
+ctx.lineTo(W-20,H-pad);
+ctx.stroke();
+
+let xs=rows.map((_,i)=>pad+(W-pad-30)*(rows.length===1?.5:i/(rows.length-1)));
+
+[
+['expected_revenue','#687687'],
+['received_revenue','#123b6d'],
+['expenses','#b42318']
+].forEach(([key,color])=>{
+ctx.strokeStyle=color;
+ctx.lineWidth=3;
+ctx.beginPath();
+
+rows.forEach((r,i)=>{
+let x=xs[i],
+y=H-pad-(r[key]/max)*(H-pad-40);
+i?ctx.lineTo(x,y):ctx.moveTo(x,y)
+});
+
+ctx.stroke()
+});
+
+ctx.font='14px Arial';
+ctx.fillStyle='#425466';
+
+rows.forEach((r,i)=>
+ctx.fillText(r.reference_month,xs[i]-25,H-25)
+);
+
+ctx.fillStyle='#687687';
+ctx.fillText('Previsto',70,22);
+
+ctx.fillStyle='#123b6d';
+ctx.fillText('Recebido',160,22);
+
+ctx.fillStyle='#b42318';
+ctx.fillText('Despesas',260,22)
+}
+
+
+async function renderDashboard(){
+
+let finance=await api('/api/finance/'+condo.id);
+let req=await api('/api/requests/'+condo.id);
+let posts=await api('/api/posts/'+condo.id);
+
+const latest=finance.at(-1),
+prev=finance.at(-2);
+
+const delinq=latest?latest.delinquency_rate:0;
+const collection=latest?latest.collection_rate:0;
+const balance=latest?latest.balance:0;
+
+const growth=
+(latest&&prev&&prev.received_revenue)
+?
+((latest.received_revenue-prev.received_revenue)/
+prev.received_revenue*100)
+:
+0;
+
+const prevDelinq=
+prev?prev.delinquency_rate:null;
+
+const prevCollection=
+prev?prev.collection_rate:null;
+
+const prevBalance=
+prev?prev.balance:null;
+
+dDelinq.textContent=
+delinq.toFixed(2)+'%';
+
+dCollection.textContent=
+collection.toFixed(2)+'%';
+
+dBalance.textContent=
+brl(balance);
+
+dGrowth.textContent=
+(growth>=0?'+':'')+
+growth.toFixed(2)+'%';
+
+dResidents.textContent=
+people.filter(
+x=>x.role==='condomino'
+).length;
+
+dStaff.textContent=
+people.filter(
+x=>x.role==='funcionario'
+).length;
+
+dOpenReq.textContent=
+req.filter(
+x=>x.status!=='Concluído'
+).length;
+
+dPosts.textContent=
+posts.length;
+
+dDelinqTrend.textContent=
+prevDelinq===null
+?
+'Sem histórico'
+:
+trendText(
+prevDelinq-delinq,
+true,
+'p.p.'
+);
+
+dCollectionTrend.textContent=
+prevCollection===null
+?
+'Sem histórico'
+:
+trendText(
+collection-prevCollection,
+true,
+'p.p.'
+);
+
+dBalanceTrend.textContent=
+prevBalance===null
+?
+'Sem histórico'
+:
+trendText(
+balance-prevBalance,
+true,
+'R$'
+);
+
+dGrowthStatus.textContent=
+finance.length<2
+?
+'Sem histórico'
+:
+(
+growth>0
+?
+'Crescimento'
+:
+growth<0
+?
+'Queda'
+:
+'Estável'
+);
+
+drawDashFinance(finance);
+drawDashDelinq(finance);
+renderInsights(
+finance,
+req,
+posts
+);
+
+}
+
+
+function trendText(
+diff,
+positiveIsGood,
+unit
+){
+
+if(Math.abs(diff)<0.01)
+return 'Estável vs. mês anterior';
+
+let good=
+(diff>0)===positiveIsGood;
+
+let symbol=
+diff>0?'▲':'▼';
+
+if(unit==='R$')
+return `${symbol} ${brl(Math.abs(diff))} vs. mês anterior`;
+
+return `${symbol} ${Math.abs(diff).toFixed(2)} ${unit} vs. mês anterior`;
+
+}
+
+
+function drawDashFinance(rows){
+
+const c=dashFinanceCanvas,
+ctx=c.getContext('2d');
+
+ctx.clearRect(
+0,
+0,
+c.width,
+c.height
+);
+
+if(!rows.length){
+
+ctx.font='20px Arial';
+
+ctx.fillText(
+'Sem dados financeiros.',
+30,
+55
+);
+
+return
+
+}
+
+const W=c.width,
+H=c.height,
+p=50,
+max=Math.max(
+1,
+...rows.flatMap(
+r=>[
+r.received_revenue,
+r.expenses
+]
+)
+);
+
+ctx.strokeStyle='#c4ccd5';
+
+ctx.beginPath();
+
+ctx.moveTo(p,20);
+
+ctx.lineTo(
+p,
+H-p
+);
+
+ctx.lineTo(
+W-20,
+H-p
+);
+
+ctx.stroke();
+
+const xs=
+rows.map(
+(_,i)=>
+p+
+(W-p-30)*
+(
+rows.length===1
+?
+.5
+:
+i/(rows.length-1)
+)
+);
+
+[
+['received_revenue','#123b6d'],
+['expenses','#b42318']
+].forEach(
+([k,col])=>{
+
+ctx.strokeStyle=col;
+
+ctx.lineWidth=3;
+
+ctx.beginPath();
+
+rows.forEach(
+(r,i)=>{
+
+let x=xs[i],
+y=
+H-p-
+(r[k]/max)*
+(H-p-40);
+
+i
+?
+ctx.lineTo(x,y)
+:
+ctx.moveTo(x,y)
+
+}
+);
+
+ctx.stroke();
+
+}
+);
+
+ctx.font='13px Arial';
+
+ctx.fillStyle='#425466';
+
+rows.forEach(
+(r,i)=>
+ctx.fillText(
+r.reference_month,
+xs[i]-20,
+H-20
+)
+);
+
+ctx.fillStyle='#123b6d';
+
+ctx.fillText(
+'Recebido',
+70,
+20
+);
+
+ctx.fillStyle='#b42318';
+
+ctx.fillText(
+'Despesas',
+160,
+20
+);
+
+}
+
+
+function drawDashDelinq(rows){
+
+const c=dashDelinqCanvas,
+ctx=c.getContext('2d');
+
+ctx.clearRect(
+0,
+0,
+c.width,
+c.height
+);
+
+if(!rows.length){
+
+ctx.font='20px Arial';
+
+ctx.fillText(
+'Sem dados de inadimplência.',
+30,
+55
+);
+
+return
+
+}
+
+const W=c.width,
+H=c.height,
+p=50,
+max=Math.max(
+10,
+...rows.map(
+r=>r.delinquency_rate
+)
+);
+
+ctx.strokeStyle='#c4ccd5';
+
+ctx.beginPath();
+
+ctx.moveTo(p,20);
+
+ctx.lineTo(
+p,
+H-p
+);
+
+ctx.lineTo(
+W-20,
+H-p
+);
+
+ctx.stroke();
+
+const bw=
+Math.max(
+18,
+(W-p-40)/
+Math.max(
+rows.length,
+1
+)*
+0.55
+);
+
+rows.forEach(
+(r,i)=>{
+
+let x=
+p+20+
+i*
+(
+(W-p-40)/
+rows.length
+),
+
+bh=
+(r.delinquency_rate/max)*
+(H-p-45),
+
+y=
+H-p-bh;
+
+ctx.fillStyle='#123b6d';
+
+ctx.fillRect(
+x,
+y,
+bw,
+bh
+);
+
+ctx.fillStyle='#425466';
+
+ctx.font='13px Arial';
+
+ctx.fillText(
+r.reference_month,
+x-2,
+H-20
+);
+
+}
+);
+
+}
+
+
+function renderInsights(
+finance,
+req,
+posts
+){
+
+let insights=[];
+
+if(!finance.length)
+
+insights.push(
+'Adicione os dados financeiros mensais para o dashboard gerar análises automáticas.'
+);
+
+else{
+
+const l=finance.at(-1),
+p=finance.at(-2);
+
+if(l.delinquency_rate>=10)
+
+insights.push(
+`A inadimplência está em ${l.delinquency_rate.toFixed(2)}%, nível que merece atenção.`
+);
+
+else if(l.delinquency_rate>0)
+
+insights.push(
+`A inadimplência atual é de ${l.delinquency_rate.toFixed(2)}%.`
+);
+
+else
+
+insights.push(
+'Não há inadimplência registrada no mês atual.'
+);
+
+if(l.balance<0)
+
+insights.push(
+`O saldo do mês está negativo em ${brl(Math.abs(l.balance))}.`
+);
+
+else
+
+insights.push(
+`O saldo do mês está positivo em ${brl(l.balance)}.`
+);
+
+if(
+p&&
+p.received_revenue
+){
+
+let g=
+(l.received_revenue-
+p.received_revenue)/
+p.received_revenue*
+100;
+
+insights.push(
+g>0
+?
+`A arrecadação cresceu ${g.toFixed(2)}% em relação ao mês anterior.`
+:
+g<0
+?
+`A arrecadação caiu ${Math.abs(g).toFixed(2)}% em relação ao mês anterior.`
+:
+'A arrecadação ficou estável em relação ao mês anterior.'
+);
+
+}
+
+}
+
+let open=
+req.filter(
+x=>x.status!=='Concluído'
+).length;
+
+insights.push(
+`Há ${open} solicitação(ões) ainda não concluída(s).`
+);
+
+insights.push(
+`Foram publicados ${posts.length} comunicado(s) neste condomínio.`
+);
+
+dashboardInsights.innerHTML=
+insights.map(
+x=>
+`<div class="row">${esc(x)}</div>`
+).join('');
+
+}
+
+
+if(token)init();
+
+</script>
 </body>
 </html>
